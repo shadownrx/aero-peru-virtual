@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: "Bienvenido a AERO PERU Virtual, la nueva aerolínea virtual de Perú.",
     generator: 'v0.dev',
     icons: {
-      icon: "/avion.png", // Asegúrate de que el favicon está en `public/`
+      icon: "/viajar.png", // Asegúrate de que el favicon está en `public/`
     },
 }
 
