@@ -21,7 +21,7 @@ export function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2">
-        <Image src="/public/Aeroperu8.png" alt="AERO PERU Virtual" width={85} height={18} />
+        <Image src="/images/Aeroperu8.png" alt="AERO PERU Virtual" width={85} height={18} />
         <div className="flex flex-col">
         <span className="text-xl font-medium text-primary">AERO PERU</span>
         <span className="text-xs font-light tracking-wider uppercase">{t("virtual")}</span>
