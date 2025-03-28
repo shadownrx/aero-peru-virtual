@@ -54,8 +54,8 @@ export default function Home() {
             </FadeIn>
 
             <FadeIn delay={0.4} direction="up">
-              <div className="relative h-[300px] md:h-[400px] animate-float">
-                <Image src="/images/aeroperu3.png" alt="AERO PERU Aircraft" fill className="object-contain" priority />
+              <div className="relative h-[150px] md:h-[450px] animate-float">
+                <Image src="/images/Salvador.png" alt="AERO PERU Aircraft" fill className="object-contain" priority />
               </div>
             </FadeIn>
           </div>
