@@ -12,7 +12,10 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "AERO PERU Virtual | Aerolínea Virtual",
   description: "Bienvenido a AERO PERU Virtual, la nueva aerolínea virtual de Perú.",
-    generator: 'v0.dev'
+    generator: 'v0.dev',
+    icons: {
+      icon: "/avion.png", // Asegúrate de que el favicon está en `public/`
+    },
 }
 
 export default function RootLayout({
