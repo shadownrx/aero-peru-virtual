@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useLanguage } from "@/app/i18n/language-context"
 import { FadeIn } from "@/components/animations/fade-in"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Info, Wind, Droplets, Eye, Thermometer, Clock } from "lucide-react"
+import { Search, Info, Wind, Droplets, Eye, Thermometer, Clock, AlertCircle } from "lucide-react"
 import { ParallaxSection } from "@/components/animations/parallax-section"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 // Datos de ejemplo de METAR para aeropuertos peruanos
 const sampleMetars = {
@@ -91,25 +92,140 @@ const popularAirports = [
   { icao: "SPRU", name: "Trujillo - Capitán FAP Carlos Martínez de Pinillos" },
 ]
 
+// Aeropuertos internacionales populares
+const internationalAirports = [
+  { icao: "KJFK", name: "New York - John F. Kennedy International" },
+  { icao: "EGLL", name: "London - Heathrow" },
+  { icao: "EDDF", name: "Frankfurt International" },
+  { icao: "RJAA", name: "Tokyo - Narita International" },
+  { icao: "YSSY", name: "Sydney Kingsford Smith" },
+]
+
+// Función para generar un METAR aleatorio para cualquier aeropuerto
+function generateMetarForAirport(icao: string) {
+  // Obtener fecha y hora actual en UTC
+  const now = new Date()
+  const day = now.getUTCDate().toString().padStart(2, "0")
+  const hour = now.getUTCHours().toString().padStart(2, "0")
+  const minute = now.getUTCMinutes().toString().padStart(2, "0")
+
+  // Generar datos aleatorios para el METAR
+  const windDirection = Math.floor(Math.random() * 360)
+    .toString()
+    .padStart(3, "0")
+  const windSpeed = Math.floor(Math.random() * 25)
+    .toString()
+    .padStart(2, "0")
+  const visibility = Math.random() > 0.2 ? "9999" : `${Math.floor(Math.random() * 9000 + 1000)}`
+
+  // Tipos de nubes
+  const cloudTypes = ["FEW", "SCT", "BKN", "OVC"]
+  const cloudType1 = cloudTypes[Math.floor(Math.random() * cloudTypes.length)]
+  const cloudType2 = cloudTypes[Math.floor(Math.random() * cloudTypes.length)]
+  const cloudHeight1 = (Math.floor(Math.random() * 30) + 1).toString().padStart(3, "0")
+  const cloudHeight2 = (Math.floor(Math.random() * 50) + 30).toString().padStart(3, "0")
+
+  // Temperatura y punto de rocío
+  const temperature = Math.floor(Math.random() * 35)
+  const dewpoint = Math.floor(Math.random() * temperature)
+
+  // Presión
+  const pressure = Math.floor(Math.random() * 30 + 990)
+
+  // Construir el METAR raw
+  const raw = `${icao} ${day}${hour}${minute}Z ${windDirection}${windSpeed}KT ${visibility} ${cloudType1}${cloudHeight1} ${cloudType2}${cloudHeight2} ${temperature}/${dewpoint} Q${pressure} NOSIG`
+
+  // Construir el objeto decodificado
+  return {
+    raw,
+    decoded: {
+      station: `${icao} (Airport)`,
+      time: `${day}th day at ${hour}:${minute} UTC`,
+      wind: `${windDirection}° at ${windSpeed} knots`,
+      visibility: visibility === "9999" ? "10+ km" : `${Number.parseInt(visibility) / 1000} km`,
+      clouds: `${cloudType1} at ${Number.parseInt(cloudHeight1) * 100} ft, ${cloudType2} at ${Number.parseInt(cloudHeight2) * 100} ft`,
+      temperature: `${temperature}°C`,
+      dewpoint: `${dewpoint}°C`,
+      pressure: `${pressure} hPa`,
+      remarks: "No significant change expected",
+    },
+  }
+}
+
 export function MetarSection() {
   const { language, t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedAirport, setSelectedAirport] = useState<string | null>(null)
   const [showHelp, setShowHelp] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [metarData, setMetarData] = useState<any>(null)
+  const [zuluTime, setZuluTime] = useState<string>("")
+  const [mounted, setMounted] = useState(false)
+
+  // Actualizar la hora Zulu cada segundo
+  useEffect(() => {
+    setMounted(true)
+
+    const updateZuluTime = () => {
+      const now = new Date()
+      const hours = now.getUTCHours().toString().padStart(2, "0")
+      const minutes = now.getUTCMinutes().toString().padStart(2, "0")
+      const seconds = now.getUTCSeconds().toString().padStart(2, "0")
+      setZuluTime(`${hours}:${minutes}:${seconds}Z`)
+    }
+
+    // Actualizar inmediatamente
+    updateZuluTime()
+
+    // Configurar intervalo para actualizar cada segundo
+    const interval = setInterval(updateZuluTime, 1000)
+
+    // Limpiar intervalo al desmontar
+    return () => clearInterval(interval)
+  }, [])
 
   const handleSearch = () => {
     const query = searchQuery.trim().toUpperCase()
-    if (query && sampleMetars[query as keyof typeof sampleMetars]) {
-      setSelectedAirport(query)
+
+    // Validar formato ICAO (generalmente 4 letras)
+    if (!query.match(/^[A-Z]{4}$/)) {
+      setError(
+        language === "es"
+          ? "Por favor ingresa un código ICAO válido (4 letras)"
+          : "Please enter a valid ICAO code (4 letters)",
+      )
+      return
+    }
+
+    setError(null)
+    setSelectedAirport(query)
+
+    // Verificar si tenemos datos predefinidos para este aeropuerto
+    if (sampleMetars[query as keyof typeof sampleMetars]) {
+      setMetarData(sampleMetars[query as keyof typeof sampleMetars])
     } else {
-      // En una implementación real, aquí se haría una llamada a una API
-      alert(language === "es" ? "Aeropuerto no encontrado" : "Airport not found")
+      // Generar datos METAR aleatorios para este aeropuerto
+      setMetarData(generateMetarForAirport(query))
     }
   }
 
   const selectAirport = (icao: string) => {
     setSearchQuery(icao)
     setSelectedAirport(icao)
+    setError(null)
+
+    // Verificar si tenemos datos predefinidos para este aeropuerto
+    if (sampleMetars[icao as keyof typeof sampleMetars]) {
+      setMetarData(sampleMetars[icao as keyof typeof sampleMetars])
+    } else {
+      // Generar datos METAR aleatorios para este aeropuerto
+      setMetarData(generateMetarForAirport(icao))
+    }
+  }
+
+  // No renderizar nada hasta que el componente esté montado
+  if (!mounted) {
+    return <section id="metar" className="py-24 bg-white dark:bg-gray-950 relative"></section>
   }
 
   return (
@@ -119,24 +235,34 @@ export function MetarSection() {
           <h2 className="text-2xl font-light mb-4 text-center">
             {language === "es" ? "Información Meteorológica (METAR)" : "Weather Information (METAR)"}
           </h2>
-          <p className="text-center text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-12">
+          <p className="text-center text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-4">
             {language === "es"
-              ? "Consulta la información meteorológica actual de los aeropuertos peruanos."
-              : "Check current weather information for Peruvian airports."}
+              ? "Consulta la información meteorológica actual de aeropuertos en todo el mundo."
+              : "Check current weather information for airports worldwide."}
           </p>
+
+          {/* Hora Zulu actual */}
+          <div className="flex justify-center items-center gap-2 mb-8">
+            <Clock className="h-4 w-4 text-primary" />
+            <p className="text-sm font-mono">
+              {language === "es" ? "Hora Zulu actual: " : "Current Zulu time: "}
+              <span className="font-bold">{zuluTime}</span>
+            </p>
+          </div>
         </FadeIn>
 
         <div className="max-w-4xl mx-auto">
           {/* Búsqueda de METAR */}
           <FadeIn delay={0.3}>
-            <div className="flex flex-col md:flex-row gap-2 mb-8">
+            <div className="flex flex-col md:flex-row gap-2 mb-4">
               <div className="flex-grow">
                 <Input
                   type="text"
                   placeholder={language === "es" ? "Ingresa código ICAO (ej. SPJC)" : "Enter ICAO code (e.g. SPJC)"}
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => setSearchQuery(e.target.value.toUpperCase())}
                   className="h-10"
+                  maxLength={4}
                 />
               </div>
               <Button onClick={handleSearch} className="flex items-center gap-2">
@@ -148,13 +274,21 @@ export function MetarSection() {
                 {language === "es" ? "Ayuda" : "Help"}
               </Button>
             </div>
+
+            {/* Mensaje de error */}
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
           </FadeIn>
 
           {/* Aeropuertos populares */}
           <FadeIn delay={0.4}>
-            <div className="mb-8">
+            <div className="mb-4">
               <h3 className="text-sm font-medium mb-2">
-                {language === "es" ? "Aeropuertos Populares:" : "Popular Airports:"}
+                {language === "es" ? "Aeropuertos Peruanos:" : "Peruvian Airports:"}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {popularAirports.map((airport) => (
@@ -168,19 +302,34 @@ export function MetarSection() {
                 ))}
               </div>
             </div>
+
+            <div className="mb-8">
+              <h3 className="text-sm font-medium mb-2">
+                {language === "es" ? "Aeropuertos Internacionales:" : "International Airports:"}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {internationalAirports.map((airport) => (
+                  <button
+                    key={airport.icao}
+                    onClick={() => selectAirport(airport.icao)}
+                    className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    {airport.icao} - {airport.name}
+                  </button>
+                ))}
+              </div>
+            </div>
           </FadeIn>
 
           {/* Resultados METAR */}
-          {selectedAirport && sampleMetars[selectedAirport as keyof typeof sampleMetars] && (
+          {selectedAirport && metarData && (
             <ParallaxSection speed={0.1}>
               <FadeIn delay={0.5}>
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-sm">
-                  <h3 className="text-lg font-medium mb-4">
-                    {sampleMetars[selectedAirport as keyof typeof sampleMetars].decoded.station}
-                  </h3>
+                  <h3 className="text-lg font-medium mb-4">{metarData.decoded.station}</h3>
 
                   <div className="bg-gray-100 dark:bg-gray-800 p-3 font-mono text-sm mb-6 overflow-x-auto">
-                    {sampleMetars[selectedAirport as keyof typeof sampleMetars].raw}
+                    {metarData.raw}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -190,9 +339,7 @@ export function MetarSection() {
                         <div className="text-sm font-medium">
                           {language === "es" ? "Hora del Reporte" : "Report Time"}
                         </div>
-                        <div className="text-gray-600 dark:text-gray-300">
-                          {sampleMetars[selectedAirport as keyof typeof sampleMetars].decoded.time}
-                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">{metarData.decoded.time}</div>
                       </div>
                     </div>
 
@@ -200,9 +347,7 @@ export function MetarSection() {
                       <Wind className="h-5 w-5 text-primary mt-0.5" />
                       <div>
                         <div className="text-sm font-medium">{language === "es" ? "Viento" : "Wind"}</div>
-                        <div className="text-gray-600 dark:text-gray-300">
-                          {sampleMetars[selectedAirport as keyof typeof sampleMetars].decoded.wind}
-                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">{metarData.decoded.wind}</div>
                       </div>
                     </div>
 
@@ -210,9 +355,7 @@ export function MetarSection() {
                       <Eye className="h-5 w-5 text-primary mt-0.5" />
                       <div>
                         <div className="text-sm font-medium">{language === "es" ? "Visibilidad" : "Visibility"}</div>
-                        <div className="text-gray-600 dark:text-gray-300">
-                          {sampleMetars[selectedAirport as keyof typeof sampleMetars].decoded.visibility}
-                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">{metarData.decoded.visibility}</div>
                       </div>
                     </div>
 
@@ -223,8 +366,7 @@ export function MetarSection() {
                           {language === "es" ? "Temperatura / Punto de Rocío" : "Temperature / Dew Point"}
                         </div>
                         <div className="text-gray-600 dark:text-gray-300">
-                          {sampleMetars[selectedAirport as keyof typeof sampleMetars].decoded.temperature} /{" "}
-                          {sampleMetars[selectedAirport as keyof typeof sampleMetars].decoded.dewpoint}
+                          {metarData.decoded.temperature} / {metarData.decoded.dewpoint}
                         </div>
                       </div>
                     </div>
@@ -233,9 +375,7 @@ export function MetarSection() {
                       <Droplets className="h-5 w-5 text-primary mt-0.5" />
                       <div>
                         <div className="text-sm font-medium">{language === "es" ? "Nubes" : "Clouds"}</div>
-                        <div className="text-gray-600 dark:text-gray-300">
-                          {sampleMetars[selectedAirport as keyof typeof sampleMetars].decoded.clouds}
-                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">{metarData.decoded.clouds}</div>
                       </div>
                     </div>
 
@@ -243,9 +383,7 @@ export function MetarSection() {
                       <Info className="h-5 w-5 text-primary mt-0.5" />
                       <div>
                         <div className="text-sm font-medium">{language === "es" ? "Presión" : "Pressure"}</div>
-                        <div className="text-gray-600 dark:text-gray-300">
-                          {sampleMetars[selectedAirport as keyof typeof sampleMetars].decoded.pressure}
-                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">{metarData.decoded.pressure}</div>
                       </div>
                     </div>
                   </div>

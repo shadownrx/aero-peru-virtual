@@ -15,7 +15,7 @@ const testimonials = {
     },
     {
       quote:
-        "Como controlador aéreo virtual, puedo decir que AERO PERU Virtual ofrece una de las experiencias más auténticas. Los procedimientos y la atención al detalle son excepcionales.",
+        "Como controlador aéreo virtual, puedo decir que AERO PERU Virtual ofrece una de las experiencias m��s auténticas. Los procedimientos y la atención al detalle son excepcionales.",
       author: "María Sánchez",
       role: "Controladora ATC - 1 año",
       avatar: "/placeholder.svg?height=80&width=80",
