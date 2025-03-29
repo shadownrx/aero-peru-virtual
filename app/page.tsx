@@ -14,7 +14,6 @@ import { StatsSection } from "@/components/stats-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { GallerySection } from "@/components/gallery-section"
 import { RoutesSection } from "@/components/routes-section"
-import { ResourcesSection } from "@/components/resources-section"
 import { MetarSection } from "@/components/metar-section"
 
 export default function Home() {
@@ -54,8 +53,8 @@ export default function Home() {
             </FadeIn>
 
             <FadeIn delay={0.4} direction="up">
-              <div className="relative h-[150px] md:h-[450px] animate-float">
-                <Image src="/images/Aeroperu8.png" alt="AERO PERU Aircraft" fill className="object-contain" priority />
+              <div className="relative h-[300px] md:h-[400px] animate-float">
+                <Image src="/images/aeroperu3.png" alt="AERO PERU Aircraft" fill className="object-contain" priority />
               </div>
             </FadeIn>
           </div>
@@ -109,9 +108,6 @@ export default function Home() {
 
       {/* Testimonials Section */}
       <TestimonialsSection />
-
-      {/* Resources Section */}
-      <ResourcesSection />
 
       {/* FAQ Section */}
       <FaqSection />
