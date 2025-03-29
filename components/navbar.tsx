@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Menu, X, DiscIcon as Discord } from "lucide-react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -19,10 +20,11 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-medium text-primary">AERO PERU</span>
-            <span className="text-xs font-light tracking-wider uppercase">{t("virtual")}</span>
-          </Link>
+        <Image src="/images/Aeroperu8.png" alt="AERO PERU Virtual" width={85} height={18} />
+        <div className="flex flex-col">
+        <span className="text-xl font-medium text-primary">AERO PERU</span>
+      <span className="text-xs font-light tracking-wider uppercase">{t("virtual")}</span>
+  </div>
         </div>
 
         {/* Desktop Navigation */}

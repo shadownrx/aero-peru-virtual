@@ -34,7 +34,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen relative">
       <ParticlesBackground />
 
-      {/* Hero Section - Minimalista con animaciones */}
+      {/* Funciones animaciones */}
       <section className="relative w-full py-24 md:py-32 bg-white dark:bg-gray-950 overflow-hidden">
         <div className="container relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -53,8 +53,8 @@ export default function Home() {
             </FadeIn>
 
             <FadeIn delay={0.4} direction="up">
-              <div className="relative h-[300px] md:h-[400px] animate-float">
-                <Image src="/images/aeroperu3.png" alt="AERO PERU Aircraft" fill className="object-contain" priority />
+              <div className="relative h-[150px] md:h-[450px] animate-float">
+                <Image src="/images/Aeroperu8.png" alt="AERO PERU Aircraft" fill className="object-contain" priority />
               </div>
             </FadeIn>
           </div>
