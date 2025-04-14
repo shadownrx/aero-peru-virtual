@@ -58,7 +58,7 @@ export function Footer() {
 
           <div>
             <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{t("contact")}</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 font-light mb-4">info@aeroperuvirtual.com</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-light mb-4">aeroperuinfo@gmail.com</p>
             <div className="flex space-x-4">
               <Link href="#" className="text-gray-400 hover:text-primary">
                 <Facebook size={18} />
