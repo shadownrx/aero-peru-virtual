@@ -292,7 +292,7 @@ export function FaqSection() {
               {Object.entries(faqs).map(([categoryId, categoryFaqs]) => (
                 <TabsContent key={categoryId} value={categoryId} className="mt-0">
                   <div className="mb-6">
-                    {categoryId !== "general" && links[categoryId as keyof typeof links] && (
+                    {categoryId !== "general" && links[categoryId] && (
                       <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-sm mb-6 flex flex-col md:flex-row justify-between items-center">
                         <div className="mb-4 md:mb-0">
                           <h3 className="text-lg font-medium">
@@ -307,9 +307,9 @@ export function FaqSection() {
                           </p>
                         </div>
                         <Link
-                          href={links[categoryId as keyof typeof links]}
-                          target={links[categoryId as keyof typeof links].startsWith("http") ? "_blank" : "_self"}
-                          rel={links[categoryId as keyof typeof links].startsWith("http") ? "noopener noreferrer" : ""}
+                          href={links[categoryId]}
+                          target={links[categoryId].startsWith("http") ? "_blank" : "_self"}
+                          rel={links[categoryId].startsWith("http") ? "noopener noreferrer" : ""}
                         >
                           <Button variant="outline" className="rounded-none flex items-center gap-2">
                             {language === "es" ? "Ver Normativa Completa" : "View Complete Regulations"}

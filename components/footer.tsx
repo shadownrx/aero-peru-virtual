@@ -42,7 +42,7 @@ export function Footer() {
                 {t("resources")}
               </Link>
               <Link href="/#rules" className="text-sm text-gray-500 hover:text-primary dark:text-gray-400">
-                {t("rules")}
+                {t("Rules")}
               </Link>
               <Link href="#contact" className="text-sm text-gray-500 hover:text-primary dark:text-gray-400">
                 {t("contact")}

@@ -56,8 +56,11 @@ export function Navbar() {
           <Link href="/resources" className="text-sm font-light transition-colors hover:text-primary">
             {t("resources")}
           </Link>
-          <Link href="/#rules" className="text-sm font-light transition-colors hover:text-primary">
-            {t("rules")}
+          <Link href="/resources/regulaciones-va" className="text-sm font-light transition-colors hover:text-primary">
+            {t("Reglas")}
+          </Link>
+          <Link href="/resources/politica-gdpr" className="text-sm font-light transition-colors hover:text-primary">
+            {t("Politica")}
           </Link>
           <Link href="#contact" className="text-sm font-light transition-colors hover:text-primary">
             {t("contact")}

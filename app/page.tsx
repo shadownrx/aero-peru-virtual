@@ -34,7 +34,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen relative">
       <ParticlesBackground />
 
-      {/* Funciones animaciones */}
+      {/* Hero Section - Minimalista con animaciones */}
       <section className="relative w-full py-24 md:py-32 bg-white dark:bg-gray-950 overflow-hidden">
         <div className="container relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -53,7 +53,7 @@ export default function Home() {
             </FadeIn>
 
             <FadeIn delay={0.4} direction="up">
-              <div className="relative h-[150px] md:h-[450px] animate-float">
+              <div className="relative h-[300px] md:h-[400px] animate-float">
                 <Image src="/images/Aeroperu8.png" alt="AERO PERU Aircraft" fill className="object-contain" priority />
               </div>
             </FadeIn>
@@ -124,7 +124,7 @@ export default function Home() {
               <form className="space-y-6">
                 <div className="space-y-4">
                   <input
-                    type="text"
+                    type="t2ext"
                     className="w-full px-3 py-2 border-b border-gray-300 dark:border-gray-700 bg-transparent focus:outline-none focus:border-primary transition-all duration-300"
                     placeholder={t("name")}
                   />
@@ -173,4 +173,3 @@ export default function Home() {
     </div>
   )
 }
-
