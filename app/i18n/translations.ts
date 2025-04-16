@@ -14,7 +14,7 @@ export const translations = {
     welcome: "Bienvenido a",
     virtual: "Virtual",
     heroText:
-      "Explora los cielos de Perú y el mundo con nuestra aerolínea virtual. Una experiencia de vuelo inmersiva y realista.",
+      "AEROPERU está de regreso. Conectando el espiritú de Perú en cada vuelo virtual. Identificanos en IVAO como el callsign PLI",
     getStarted: "Comenzar",
 
     // About

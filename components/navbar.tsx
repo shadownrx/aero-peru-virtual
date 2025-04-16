@@ -50,7 +50,7 @@ export function Navbar() {
           <Link href="#metar" className="text-sm font-light transition-colors hover:text-primary">
             {t("metar")}
           </Link>
-          <Link href="#routes" className="text-sm font-light transition-colors hover:text-primary">
+          <Link href="/routes" className="text-sm font-light transition-colors hover:text-primary">
             {t("routes")}
           </Link>
           <Link href="/resources" className="text-sm font-light transition-colors hover:text-primary">
@@ -117,7 +117,7 @@ export function Navbar() {
               {t("metar")}
             </Link>
             <Link
-              href="#routes"
+              href="/routes"
               className="text-sm font-light transition-colors hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >

@@ -9,12 +9,16 @@ import { useLanguage } from "@/app/i18n/language-context"
 import { FadeIn } from "@/components/animations/fade-in"
 import { ParallaxSection } from "@/components/animations/parallax-section"
 import { ParticlesBackground } from "@/components/animations/particles-background"
-import { FaqSection } from "@/components/faq-section"
+import { RulesSection } from "@/components/rules-section"
 import { StatsSection } from "@/components/stats-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { GallerySection } from "@/components/gallery-section"
 import { RoutesSection } from "@/components/routes-section"
 import { MetarSection } from "@/components/metar-section"
+import { AnimatedLogo } from "@/components/animations/animated-logo"
+import { HeroParticles } from "@/components/animations/hero-particles"
+// Importar el componente TypingEffect
+import { TypingEffect } from "@/components/animations/typing-effect"
 
 export default function Home() {
   const { t } = useLanguage()
@@ -36,14 +40,21 @@ export default function Home() {
 
       {/* Hero Section - Minimalista con animaciones */}
       <section className="relative w-full py-24 md:py-32 bg-white dark:bg-gray-950 overflow-hidden">
+        <HeroParticles />
         <div className="container relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            {/* Reemplazar el párrafo del hero con el efecto de escritura */}
             <FadeIn delay={0.2} direction="up">
               <div className="space-y-6">
                 <h1 className="text-4xl md:text-5xl font-light tracking-tight">
                   {t("welcome")} <span className="text-primary font-normal">AERO PERU</span> {t("virtual")}
                 </h1>
-                <p className="text-base text-gray-500 dark:text-gray-400 font-light leading-relaxed">{t("heroText")}</p>
+                <TypingEffect
+                  text={t("heroText")}
+                  speed={30}
+                  delay={800}
+                  className="text-base md:text-lg text-gray-500 dark:text-gray-400 font-light leading-relaxed max-w-lg"
+                />
                 <div className="pt-4">
                   <Button variant="outline" className="rounded-none btn-glow">
                     {t("getStarted")} <ArrowRight className="ml-2 h-4 w-4" />
@@ -53,9 +64,7 @@ export default function Home() {
             </FadeIn>
 
             <FadeIn delay={0.4} direction="up">
-              <div className="relative h-[300px] md:h-[400px] animate-float">
-                <Image src="/images/Aeroperu8.png" alt="AERO PERU Aircraft" fill className="object-contain" priority />
-              </div>
+              <AnimatedLogo src="/images/Aeroperu8.png" alt="AERO PERU Aircraft" />
             </FadeIn>
           </div>
         </div>
@@ -88,7 +97,7 @@ export default function Home() {
               <ParallaxSection speed={-0.2}>
                 <FadeIn delay={0.4} direction="right">
                   <div className="relative h-[250px] md:h-[300px] hover-zoom rounded-sm overflow-hidden">
-                    <Image src="/images/aeroperu5.png" alt="AERO PERU Aircraft" fill className="object-cover" />
+                    <Image src="/images/Aeroperu8.png" alt="AERO PERU Aircraft" fill className="object-cover" />
                   </div>
                 </FadeIn>
               </ParallaxSection>
@@ -109,8 +118,8 @@ export default function Home() {
       {/* Testimonials Section */}
       <TestimonialsSection />
 
-      {/* FAQ Section */}
-      <FaqSection />
+      {/* Rules Section */}
+      <RulesSection />
 
       {/* Contact Section - Minimalista con animaciones */}
       <section id="contact" className="py-24 bg-gray-50 dark:bg-gray-900 relative">
@@ -124,7 +133,7 @@ export default function Home() {
               <form className="space-y-6">
                 <div className="space-y-4">
                   <input
-                    type="t2ext"
+                    type="text"
                     className="w-full px-3 py-2 border-b border-gray-300 dark:border-gray-700 bg-transparent focus:outline-none focus:border-primary transition-all duration-300"
                     placeholder={t("name")}
                   />

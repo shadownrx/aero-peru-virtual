@@ -4,6 +4,8 @@ import { useLanguage } from "@/app/i18n/language-context"
 import { FadeIn } from "@/components/animations/fade-in"
 import { ParallaxSection } from "@/components/animations/parallax-section"
 import { Plane } from "lucide-react"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 const popularRoutes = {
   es: [
@@ -104,9 +106,14 @@ export function RoutesSection() {
     <section id="routes" className="py-24 bg-gray-50 dark:bg-gray-900 relative overflow-hidden">
       <div className="container relative z-10">
         <FadeIn delay={0.2}>
-          <h2 className="text-2xl font-light mb-12 text-center">
+          <h2 className="text-2xl font-light mb-6 text-center">
             {language === "es" ? "Rutas Populares" : "Popular Routes"}
           </h2>
+          <p className="text-center text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-8">
+            {language === "es"
+              ? "Explora algunas de nuestras rutas más populares. Vuela a los destinos más emblemáticos de Perú."
+              : "Explore some of our most popular routes. Fly to the most iconic destinations in Peru."}
+          </p>
         </FadeIn>
 
         <ParallaxSection speed={0.1}>
@@ -144,8 +151,17 @@ export function RoutesSection() {
             ))}
           </div>
         </ParallaxSection>
+
+        <FadeIn delay={0.5}>
+          <div className="mt-12 text-center">
+            <Link href="/routes">
+              <Button variant="outline" className="rounded-none">
+                {language === "es" ? "Ver Todas las Rutas" : "View All Routes"}
+              </Button>
+            </Link>
+          </div>
+        </FadeIn>
       </div>
     </section>
   )
 }
-

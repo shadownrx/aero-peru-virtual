@@ -8,6 +8,7 @@ import { ArrowLeft, Download, Printer } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { VARegulationsContent } from "@/app/resources/resource-content-regulations"
+import { Navbar } from "@/components/navbar"
 
 export default function VARegulationsPage() {
   const { language } = useLanguage()

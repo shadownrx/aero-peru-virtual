@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 
+
 // Componente para las Regulaciones de VA en español
 export const RegulacionesVAContent = () => (
   <>
